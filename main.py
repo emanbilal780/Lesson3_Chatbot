@@ -45,6 +45,10 @@ def recommend():
         elif answer == "no":
             print(Fore.RED + "TravelBot: Let's try another.")
             recommend()  # Recursive call if the user rejects the suggestion
+        
+        elif "time" in user_input or "clock" in user_input:
+
+            local_time()
 
         else:
             print(Fore.RED + "TravelBot: I'll suggest again.")
@@ -92,6 +96,8 @@ def show_help():
     print(Fore.GREEN + "- Give budget tips (say 'budget')")
 
     print(Fore.CYAN + "Type 'exit' or 'bye' to end.\n")
+
+    print(Fore.GREEN + "- Tell local time in a city (say 'time')")
 
 
 def chat():
@@ -166,6 +172,39 @@ def budget_tip():
 
     else:
         print(Fore.RED + "TravelBot: Please enter numbers only, like 500.")
+
+from datetime import datetime, timedelta
+
+# Offset from UTC in hours for a few cities
+city_offsets = {
+
+    "tokyo": 9,
+    "paris": 1,
+    "new york": -4,
+    "london": 1,
+    "dubai": 4,
+    "sydney": 10
+
+}
+
+def local_time():
+
+    print(Fore.CYAN + "TravelBot: Which city? (Tokyo, Paris, New York, London, Dubai, Sydney)")
+
+    city = normalize_input(input(Fore.YELLOW + "You: "))
+
+    if city in city_offsets:
+
+        offset = city_offsets[city]
+
+        utc_now = datetime.utcnow()
+
+        city_time = utc_now + timedelta(hours=offset)
+
+        print(Fore.GREEN + f"TravelBot: It's currently {city_time.strftime('%I:%M %p')} in {city.title()}.")
+
+    else:
+        print(Fore.RED + "TravelBot: Sorry, I don't have that city yet.")
 
 if __name__ == "__main__":
 
